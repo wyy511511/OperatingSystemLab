@@ -9,55 +9,9 @@
 static int Major; // Major number of the device driver
 static char *device_buffer; // Pointer to the device buffer
 
-// Called when the module is loaded
-static int __init chardev_init(void)
-{
-    printk(KERN_INFO "Initializing chardev\n");
 
-    // Allocate memory for the device buffer
-    device_buffer = kmalloc(BUFFER_SIZE, GFP_KERNEL);
-    if (!device_buffer)
-    {
-        printk(KERN_ALERT "Failed to allocate memory for device buffer\n");
-        return -ENOMEM;
-    }
-
-    // Register the character device driver
-    Major = register_chrdev(0, DEVICE_NAME, &file_ops);
-    if (Major < 0)
-    {
-        printk(KERN_ALERT "Failed to register character device driver\n");
-        kfree(device_buffer);
-        return Major;
-    }
-
-    printk(KERN_INFO "Registered chardev with major number %d\n", Major);
-
-    return 0;
-}
-
-// Called when the module is unloaded
-static void __exit chardev_exit(void)
-{
-    printk(KERN_INFO "Exiting chardev\n");
-
-    // Unregister the character device driver
-    unregister_chrdev(Major, DEVICE_NAME);
-
-    // Free the memory allocated for the device buffer
-    kfree(device_buffer);
-}
 
 // File operations for the character device driver
-static struct file_operations file_ops = {
-    .owner = THIS_MODULE,
-    .read = chardev_read,
-    .write = chardev_write,
-    .open = chardev_open,
-    .release = chardev_release,
-    .llseek = chardev_llseek,
-};
-
 // Called when the device file is opened
 static int chardev_open(struct inode *inode, struct file *file)
 {
@@ -164,7 +118,55 @@ file->f_pos = newpos;
 return newpos;
 
 }
+static struct file_operations file_ops = {
+    .owner = THIS_MODULE,
+    .read = chardev_read,
+    .write = chardev_write,
+    .open = chardev_open,
+    .release = chardev_release,
+    .llseek = chardev_llseek,
+};
+// Called when the module is loaded
+static int __init chardev_init(void)
+{
+    printk(KERN_INFO "Initializing chardev\n");
 
+    // Allocate memory for the device buffer
+    device_buffer = kmalloc(BUFFER_SIZE, GFP_KERNEL);
+    if (!device_buffer)
+    {
+        printk(KERN_ALERT "Failed to allocate memory for device buffer\n");
+        return -ENOMEM;
+    }
+
+    // Register the character device driver
+    Major = register_chrdev(240, DEVICE_NAME, &file_ops);
+    if (Major < 0)
+    {
+        printk(KERN_ALERT "Failed to register character device driver\n");
+        kfree(device_buffer);
+        return Major;
+    }
+    if (Major != 240){
+printk(KERN_ALERT "fail240\n");
+}
+
+    printk(KERN_INFO "Registered chardev with major number %d\n", Major);
+
+    return 0;
+}
+
+// Called when the module is unloaded
+static void __exit chardev_exit(void)
+{
+    printk(KERN_INFO "Exiting chardev\n");
+
+    // Unregister the character device driver
+    unregister_chrdev(Major, DEVICE_NAME);
+
+    // Free the memory allocated for the device buffer
+    kfree(device_buffer);
+}
 // Register the init and exit functions with the kernel
 module_init(chardev_init);
 module_exit(chardev_exit);
