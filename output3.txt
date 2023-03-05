@@ -1,0 +1,105 @@
+Test seek with whence 0
++ seek SEEK_SET 0 = 0
++ seek SEEK_SET 755 = 755
+- seek SEEK_SET 756 = 756
+- seek SEEK_SET 757 = 757
+- seek SEEK_SET -516 = -1
+Cumulative score: 2
+
+Test seek with whence 1
++ seek SEEK_CUR 0 = 0
++ seek SEEK_CUR 503 = 503
++ seek SEEK_CUR 129 = 632
++ seek SEEK_CUR -299 = 333
++ seek SEEK_CUR -228 = 105
+Cumulative score: 7
+
+Test seek with whence 2
+- seek SEEK_END 0 = 756
++ seek SEEK_END -302 = 454
+- seek SEEK_END 2094 = -1
++ seek SEEK_END -1 = 755
+- seek SEEK_END 1 = -1
+Cumulative score: 9
+
+Test single reads
++ read 81 bytes = 81
++ read 755 bytes = 755
++ read 756 bytes = 756
+- read 757 bytes = 756
+- read 1397 bytes = 756
+Cumulative score: 12
+
+Test consecutive reads
++ read 197 + 97 = 294
++ read 326 + 429 = 755
++ read 77 + 679 = 756
+- read 96 + 661 = 660
++ read 756 + 0 = 756
+Cumulative score: 16
+
+Test single writes
++ write 329 bytes = 329
++ write 755 bytes = 755
++ write 756 bytes = 756
+- write 757 bytes = 756
+- write 2554 bytes = 756
+Cumulative score: 19
+
+Test consecutive writes
++ write 374 + 47 = 421
++ write 8 + 747 = 755
++ write 299 + 457 = 756
+- write 160 + 597 = 596
++ write 756 + 0 = 756
+Cumulative score: 23
+
+Test consecutive writes with single read
+[74] = [74]
+[68] = [68]
+[69] = [69]
+[73] = [73]
+[20] = [20]
+[69] = [69]
+[73] = [73]
+[ 0] = [ 0]
+[20] = [20]
+[61] = [61]
+[20] = [20]
+[74] = [74]
+[65] = [65]
+[73] = [73]
+[74] = [74]
+[ 0] = [ 0]
+Cumulative score: 28
+
+Test consecutive reads with single write
+[61] = [61]
+[20] = [20]
+[74] = [74]
+[65] = [65]
+[73] = [73]
+[74] = [74]
+[20] = [20]
+[77] = [77]
+[61] = [61]
+[73] = [73]
+[20] = [20]
+[74] = [74]
+[68] = [68]
+[69] = [69]
+[73] = [73]
+[ 0] = [ 0]
+Cumulative score: 33
+
+Test seek + write + seek + read
+[61] = [61]
+[73] = [73]
+[20] = [20]
+[74] = [74]
+[68] = [68]
+[69] = [69]
+[73] = [73]
+[ 0] = [ 0]
+Cumulative score: 38
+
