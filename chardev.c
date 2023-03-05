@@ -40,6 +40,13 @@ static ssize_t chardev_read(struct file *file, char *buffer, size_t length, loff
         nbytes = 0;
     }
 
+    // Check if the read operation will exceed the device file size
+    if (*offset + nbytes > BUFFER_SIZE)
+    {
+        printk(KERN_ALERT "Failed to read from chardev device file: read operation exceeds device file size\n");
+        return -EINVAL;
+    }
+
     // Copy data from the device buffer to the user buffer
     if (copy_to_user(buffer, device_buffer + *offset, nbytes) != 0)
     {
@@ -52,6 +59,7 @@ static ssize_t chardev_read(struct file *file, char *buffer, size_t length, loff
 
     return nbytes;
 }
+
 
 static ssize_t chardev_write(struct file *file, const char *buffer, size_t length, loff_t *offset)
 {
@@ -214,13 +222,13 @@ static int __init chardev_init(void)
         return Major;
     }
     if (Major != 240){
-printk(KERN_ALERT "fail240\n");
-}
+        printk(KERN_ALERT "fail240\n");
+        }
 
     printk(KERN_INFO "Registered chardev with major number %d\n", Major);
 
     return 0;
-}
+    }
 
 // Called when the module is unloaded
 static void __exit chardev_exit(void)
