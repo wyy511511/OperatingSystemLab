@@ -119,7 +119,6 @@ static ssize_t chardev_write(struct file *file, const char *buffer, size_t lengt
 // }
 
 // Called when the position in the device file is changed
-
 static loff_t chardev_llseek(struct file *file, loff_t offset, int whence)
 {
     loff_t newpos;
@@ -127,28 +126,25 @@ static loff_t chardev_llseek(struct file *file, loff_t offset, int whence)
     switch (whence)
     {
         case 0: // SEEK_SET
-            if (offset < 0 || offset > BUFFER_SIZE) {
-                return -EINVAL;
-            }
             newpos = offset;
             break;
 
         case 1: // SEEK_CUR
-            if (file->f_pos + offset < 0 || file->f_pos + offset > BUFFER_SIZE) {
-                return -EINVAL;
-            }
             newpos = file->f_pos + offset;
             break;
 
         case 2: // SEEK_END
-            if (offset < 0) {
-                return -EINVAL;
-            }
             newpos = BUFFER_SIZE + offset;
             break;
 
         default:
             return -EINVAL;
+    }
+
+    // Check if the seek operation will exceed the device file size
+    if (newpos < 0 || (whence == 1 || whence == 2) && newpos > BUFFER_SIZE)
+    {
+        return -EINVAL;
     }
 
     file->f_pos = newpos;
