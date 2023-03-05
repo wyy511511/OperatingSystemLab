@@ -53,7 +53,6 @@ static ssize_t chardev_read(struct file *file, char *buffer, size_t length, loff
     return nbytes;
 }
 
-// Called when data is written to the device file
 static ssize_t chardev_write(struct file *file, const char *buffer, size_t length, loff_t *offset)
 {
     // Calculate the number of bytes to write
@@ -62,62 +61,129 @@ static ssize_t chardev_write(struct file *file, const char *buffer, size_t lengt
     {
         nbytes = length;
     }
-    if (nbytes < 0)
+
+    // Check if the write operation will exceed the device file size
+    if (nbytes <= 0)
     {
-        nbytes = 0;
+        printk(KERN_ALERT "Failed to write to chardev device file: write operation exceeds device file size\n");
+        return -EINVAL;
     }
 
     // Copy data from the user buffer to the device buffer
     if (copy_from_user(device_buffer + *offset, buffer, nbytes) != 0)
-{
-printk(KERN_ALERT "Failed to write to chardev device file\n");
-return -EFAULT;
+    {
+        printk(KERN_ALERT "Failed to write to chardev device file\n");
+        return -EFAULT;
+    }
+
+    // Update the current position
+    *offset += nbytes;
+
+    return nbytes; 
 }
+ 
+// // Called when data is written to the device file
+// static ssize_t chardev_write(struct file *file, const char *buffer, size_t length, loff_t *offset)
+// {
+//     // Calculate the number of bytes to write
+//     int nbytes = BUFFER_SIZE - *offset;
+//     if (nbytes > length)
+//     {
+//         nbytes = length;
+//     }
+//     if (nbytes < 0)
+//     {
+//         nbytes = 0;
+//     }
+
+//     // Copy data from the user buffer to the device buffer
+//     if (copy_from_user(device_buffer + *offset, buffer, nbytes) != 0)
+// {
+// printk(KERN_ALERT "Failed to write to chardev device file\n");
+// return -EFAULT;
+// }
 
 
-// Update the current position
-*offset += nbytes;
+// // Update the current position
+// *offset += nbytes;
 
-return nbytes; 
-}
+// return nbytes; 
+// }
 
 // Called when the position in the device file is changed
 static loff_t chardev_llseek(struct file *file, loff_t offset, int whence)
 {
-loff_t newpos;
-switch (whence)
-{
-    case 0: // SEEK_SET
-        newpos = offset;
-        break;
+    loff_t newpos;
 
-    case 1: // SEEK_CUR
-        newpos = file->f_pos + offset;
-        break;
+    switch (whence)
+    {
+        case 0: // SEEK_SET
+            newpos = offset;
+            break;
 
-    case 2: // SEEK_END
-        newpos = BUFFER_SIZE + offset;
-        break;
+        case 1: // SEEK_CUR
+            newpos = file->f_pos + offset;
+            break;
 
-    default:
+        case 2: // SEEK_END
+            newpos = BUFFER_SIZE + offset;
+            break;
+
+        default:
+            return -EINVAL;
+    }
+
+    // Check if the seek operation will exceed the device file size
+    if (newpos < 0 || (whence == 1 || whence == 2) && newpos > BUFFER_SIZE)
+    {
         return -EINVAL;
+    }
+
+    file->f_pos = newpos;
+
+    return newpos;
 }
 
-// Check for out-of-bounds seek
-if (newpos < 0)
-{
-    newpos = 0;
-}
-else if (newpos > BUFFER_SIZE)
-{
-    newpos = BUFFER_SIZE;
-}
 
-file->f_pos = newpos;
 
-return newpos;
+// static loff_t chardev_llseek(struct file *file, loff_t offset, int whence)
+// {
+// loff_t newpos;
+// switch (whence)
+// {
+//     case 0: // SEEK_SET
+//         newpos = offset;
+//         break;
 
-}
+//     case 1: // SEEK_CUR
+//         newpos = file->f_pos + offset;
+//         break;
+
+//     case 2: // SEEK_END
+//         newpos = BUFFER_SIZE + offset;
+//         break;
+
+//     default:
+//         return -EINVAL;
+// }
+
+// // Check for out-of-bounds seek
+// if (newpos < 0)
+// {
+//     newpos = 0;
+// }
+// else if (newpos > BUFFER_SIZE)
+// {
+//     newpos = BUFFER_SIZE;
+// }
+
+// file->f_pos = newpos;
+
+// return newpos;
+
+// }
+
+
 static struct file_operations file_ops = {
     .owner = THIS_MODULE,
     .read = chardev_read,
