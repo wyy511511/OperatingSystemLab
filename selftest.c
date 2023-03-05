@@ -43,9 +43,9 @@ int main(int argc, char *argv[])
                     exit(EXIT_FAILURE);
                 }
 
-                nread = read(fd, buffer, nbytes);
-                if (nread == -1) {
-                    perror("read");
+                nread = fread(buffer, 1, nbytes, fd);
+                if (nread == 0) {
+                    perror("fread");
                     free(buffer);
                     exit(EXIT_FAILURE);
                 }
@@ -61,9 +61,9 @@ int main(int argc, char *argv[])
                     buf[len-1] = '\0';
                 }
 
-                ssize_t nwritten = write(fd, buf, len);
+                ssize_t nwritten = fwrite(buf, 1, len, fd);
                 if (nwritten == -1) {
-                    perror("write");
+                    perror("fwrite");
                     exit(EXIT_FAILURE);
                 }
                 break;
@@ -81,6 +81,10 @@ int main(int argc, char *argv[])
                     perror("lseek");
                     exit(EXIT_FAILURE);
                 }
+
+                // read 0 bytes to manipulate file cursor position
+                char tmp_buf[1];
+                fread(tmp_buf, 0, 0, fd);
                 break;
             default:
                 continue;
@@ -94,4 +98,3 @@ int main(int argc, char *argv[])
     close(fd);
     return EXIT_SUCCESS;
 }
-
