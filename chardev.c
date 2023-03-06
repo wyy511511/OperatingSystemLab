@@ -99,6 +99,7 @@ static ssize_t chardev_write(struct file *file, const char *buffer, size_t lengt
 static loff_t chardev_llseek(struct file *file, loff_t offset, int whence)
 {
     loff_t ret = 0;
+    loff_t newpos;
 
     switch (whence)
     {
@@ -132,7 +133,7 @@ static loff_t chardev_llseek(struct file *file, loff_t offset, int whence)
             break;
 
         }
-        file->f_pos += offset 
+        file->f_pos += offset;
         ret = file->f_pos;
         break;
 
