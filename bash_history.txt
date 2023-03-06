@@ -1,0 +1,699 @@
+sudo vi /etc/default/grub
+sudo update-grub
+sudo reboot now
+sudo mkdir /home/kernel
+sudo chmod 777 /home/kernel
+sudo vi /etc/apt/sources.list
+cd /home/kernel
+sudo apt update
+sudo apt-get -y install dpkg-dev
+apt-get -y source linux-hwe
+ls
+sudo apt-get install ccache
+ls
+cd linux-hwe-4.15.0
+cp /boot/config-$(uname -r) .config
+make menuconfig
+make -j10
+sudo make modules_install
+sudo make install
+ls
+vi ./arch/x86/kernel/helloworld.c
+vi ./arch/x86/kernel/Makefile
+vi ./arch/x86/entry/syscalls/syscall_64.tbl
+vi ./include/linux/syscalls.h
+make -j10
+sudo make modules_instal
+sudo make modules_install
+sudo make install
+sudo reboot now
+cd /home/kernel/linux-hwe-4.15.0
+vi ./arch/x86/kernel/helloworld.c
+cd ..
+ls
+cd linux-hwe-4.15.0
+vi ./arch/x86/kernel
+cd /home/kernel/linux-hwe-4.15.0
+make -j10
+cd /home/kernel/linux-hwe-4.15.0
+vi ./arch/x86/kernel/csci3753_mult.c
+vi ./arch/x86/kernel/Makefile
+vi ./arch/x86/entry/syscalls/syscall_64.tbl
+vi ./include/linux/syscalls.h
+make ./arch/x86/kernel/csci3753_mult.o
+vi ./arch/x86/kernel/csci3753_mult.c
+make ./arch/x86/kernel/csci3753_mult.o
+make -j10
+sudo make modules_install
+sudo  make install
+sudo reboot now
+ls
+./a.out
+echo $?
+cd mult
+gcc mult.c
+./a.out
+./a.out 1 3
+echo $?
+uname
+uname -a
+cp mult.c /home/student/
+cp ./arch/x86/kernel/csci3753_mult.c /home/student/
+cd /home/kernel/linux-hwe-4.15.0
+cp ./arch/x86/kernel/csci3753_mult.c /home/student/
+cp ./arch/x86/kernel/cshelloworld.c /home/student/
+cp ./arch/x86/kernel/helloworld.c /home/student/
+cd /home/
+mkdir kernel/modulez
+mkdir kernel/modules
+vi helloModule.c
+cd /home/kernel/modules
+vi helloModule.c
+sudo insmod helloModule.c
+vi helloModule.c
+sudo insmod helloModule.c
+vi helloModule.c
+sudo insmod helloModule.c
+vi helloModule.c
+sudo insmod helloModule.c
+make -C /lib/modules/$(uname -r)/build M=$PWD
+touch Makefile
+vi Makefile
+make -C /lib/modules/$(uname -r)/build M=$PWD
+ls
+vi Makefile
+make -C /lib/modules/$(uname -r)/build M=$PWD
+vi helloModule.c
+cat Makefile 
+make -C /lib/modules/$(uname -r)/build M=$PWD
+vi helloModule.c
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod helloModule.c
+insmod helloModule.c
+insmod helloModule.ko
+sudo insmod helloModule.ko
+lsmod
+ls
+cp helloModule.c /home/student
+cat helloModule.
+cat helloModule.c
+dmesg | tail
+sudo reboot now
+cd student
+cd /home/student
+ls
+gcc helloworld.c
+gcc helloworld0.c
+./a.out
+echo $?
+dmesg | tail
+ls
+cd mult
+gcc mult.c
+./a.out
+./a.out 3 4
+./a.out 7 8
+echo $?
+dmesg | tail
+vi Makefile
+echo $?
+ls -l/dev/sda*
+cd ..
+ls -l/dev/sda*
+ls -l /dev/sda*
+cd /home/kernel/linux-hwe-4.15.0/Documentation/admin-guide/devices.txt
+cd /home/kernel/linux-hwe-4.15.0
+ls
+cd Documentation
+cd admin-guide
+ls
+cat devices.txt
+ls -l /dev/sda*
+cd ..
+ls
+cd modules
+cd Modules
+cd ..
+cd modules
+ls
+cat Makefile 
+git pull git@github.com:wyy511511/PA.git 
+sudo apt install git
+git pull git@github.com:wyy511511/PA.git 
+git clone  git@github.com:wyy511511/PA.git 
+ssh-keygen -t rsa wuyaoyao0309@163.com
+ssh-keygen -t rsa -C wuyaoyao0309@163.com
+cd /home/student/.ssh/id_rsa.pub
+cat /home/student/.ssh/id_rsa.pub
+git clone  git@github.com:wyy511511/PA.git 
+ssh -T git@github.com
+git clone git@github.com:wyy511511/PA.git
+cd ..
+ls
+cd student
+ls
+cd ..
+ls
+cd student
+ls
+cp chardev.c /home/kernel/modules
+cd  /home/kernel/modules
+ls
+vi Makefile
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.c
+sudo insmod chardev.ko
+ls
+make -C /lib/modules/$(uname -r)/build M=$PWD
+vi chardev.c
+make -C /lib/modules/$(uname -r)/build M=$PWD
+vi chardev.c
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+dmese
+dmesg
+vi chardev.c
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+rm -rf chardev.ko
+sudo insmod chardev.ko
+ls
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+dmesg
+echo "hw5111" > /dev/chardev
+sudo echo "hw511" > /dev/chardev
+chmod /dev/chardev
+lsmod
+sudo mknod -m 777 /dev/chardev c 240 0
+cat /dev/chardev
+cd /dev
+ls
+cat chardev
+cd chardev
+cat chardev
+sudo mknod -m 777 /dev/chardev c 240 0
+dmesg
+sudo mknod -m 777 /dev/chardev c 240 0
+dmesg
+cd ..
+echo "hw321" > /dev/chardev
+cd /home/kernel/modules
+s
+ls
+vi chardev.c
+sudo rmmod chardev
+sudo rmmmmmmmmmm /dev/chardev
+sudo rm /dev/chardev
+lsmod
+ls
+rm -rf chardev.ko
+rm -rf chardev.o
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+sudo mknod -m 777 /dev/chardev c 240 0
+echo "hw321" > /dev/chardev
+cat /dev/chardev
+git clone git@github.com:wyy511511/PA.git
+ls -al ~/.ssh
+ssh-keygen -t 511wyy -C "wuyaoyao0309@163.com"
+ssh-keygen -t ed25519 -C "wuyaoyao0309@163.com"
+eval "$(ssh-agent -s)"
+ssh -add ~/.ssh/id_ed25519
+ssh-add ~/.ssh/id_ed25519
+cat ~/.ssh/id_ed25519.pub
+git clone git@github.com:wyy511511/PA.git
+ls
+cp chardev.c /home/kernel/modules/PA
+git add .
+cd PA
+git add .
+git commit -m "chardev"
+git push
+cd ..
+ls
+cd student
+cd Downloads
+ls
+chmod +x pa2grader
+./pa2grader /dev/chardev
+git clone git@github.com:wyy511511/PA.git
+./pa2grader /dev/chardev > ./PA/autograderoutput.txt
+cd PA
+ls
+git add .
+git commit -m "autograder output"
+cd ..
+ls
+cp pa2grader ./PA
+git add .
+cd PA
+git add .
+git commit -m "autograder"
+git push
+cat /dev/chardev 
+cd ..
+cd /home/kernel/modules
+vi chardev.c
+rmmod chardev
+sudo rmmod chardev
+ls
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+rm /dev/chardev
+sudo rm /dev/chardev
+sudo rmmod chardev
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+clsof
+lsof
+lsmod
+sudo rmmod chardev
+sudo rm /dev/chardev
+ls
+rm -rf chardev.ko
+rm -rf chardev.o
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+ip addr
+cd /home/kernel/modules
+ls
+rm -rf chardev.mod.o
+rm -rf chardev.ko
+rm -rf chardev.o
+s
+lls
+ls
+rm -rf chardev.mod.c
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+sudo mknod -m 777 /dev/chardev c 240 0
+echo "hworld511" > /dev/chardev
+cat /dev/chardev
+cd ..
+cd student
+ls
+cd ..
+cd student
+ls
+cd home
+ls
+cd student
+cd Downloads
+ls
+./pa2grader /dev/chardev
+./pa2grader /dev/chardev 
+cd PA
+git pull
+cat ~./.ssh/id_ed25519.pub
+cat ~/.ssh/id_ed25519.pub
+git pull
+cat ~/.ssh/config
+cat ~/.ssh/authorized_keys
+cd ~/.ssh
+ls
+rm -rf id_rsa
+rm -rf id_rsa.pub
+cd PA
+cd ..
+cd /home/student
+cd Downloads
+cd PA
+git pull
+gcc -o selftest selftest.c
+./selftest /dev/chardev
+vi selftest.c
+./selftest /dev/chardev
+ls -l /dev/chardev
+strace -e lseek selftest /dev/chardev
+strace -e lseek selftest.c /dev/chardev
+strace -e lseek ./selftest /dev/chardev
+git pull
+strace -e lseek ./selftest /dev/chardev
+gcc -o selftest selftest.c
+vi selftest.c
+gcc -o selftest selftest.c
+strace -e lseek ./selftest /dev/chardev
+git pull
+git fetch --all
+vi selftest.c
+git reset --hard origin/main
+gcc -o selftest selftest.c
+strace -e lseek ./selftest /dev/chardev
+sudo mknod -m 777 /dev/chardev c 240 0
+echo "Hello,world!" | sudo tee /dev/chardev
+sudo cat /dev/chardev
+sudo dd if=/dev/chardev of /dev/null ardev of=/dev/null bs=1 count=10 seek=-5 conv=notrunc
+sudo dd if=/dev/chardev of /dev/null ardev  bs=1 count=10 seek=-5 conv=notrunc
+sudo dd if=/dev/chardev  bs=1 count=10 seek=-5 conv=notrunc
+sudo dd if=/dev/chardev  bs=1 count=10 seek=0 conv=notrunc
+sudo cat /dev/chardev
+echo "Hello,world!" | sudo tee /dev/chardev
+sudo cat /dev/chardev
+echo hello > file.txt
+git fetch --all
+git reset --hard origin/main
+gcc -o selftest1 selftest1.c
+strace -e lseek ./selftest1 /dev/chardev
+sudo mknod -m 777 /dev/chardev c 240 0
+cat /dev/chardev
+strace -e lseek ./selftest1 /dev/chardev
+cat /dev/chardev
+strace -e lseek ./selftest1 /dev/chardev
+cat /dev/chardev
+cd /home/kernel/modules
+sudo rmmod chardev
+ls
+
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo rmmod chardev
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev
+sudo insmod chardev.ko
+make -C /lib/modules/$(uname -r)/build M=$PWD
+vi chardev.c
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+ls
+rm -rf chardev.ko
+rm -rf chardev.o
+rm -rf chardev.mod.c
+rm -rf chardev.mod.o
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+rm /dev/chardev
+sudo insmod chardev.ko
+cd /home/kernel/modules
+
+sudo insmod chardev.ko
+cd ..
+cd Downloads
+cd student/Downloads
+cd PA
+echo "123" > /dev/chardev
+sudo mknod -m 777 /dev/chardev c 240 0
+echo "123" > /dev/chardev
+cat /dev/char
+cat /dev/chardev
+./pa2grader /dev/chardev
+./pa2grader /dev/chardev > output2.txt
+git add .
+git commit -m "delete lseek 24, if greater than buffer size, keep buffer size"
+git push
+strace -e lseek ./selftest1 /dev/chardev
+echo "123456" > /dev/chardev
+cat /dev/chardev
+vi cmd
+sudo mknod -m 777 /dev/chardev c 240 0
+vi cmd
+git add .
+git commit -m "add cmd"
+git push
+git pull
+cp chardev.c /home/kernel/modules
+cd /home/kernel/modules
+sudo rmmod chardev
+sudo rm /dev/chardev
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+vi chardev.c
+sudo insmod chardev.ko
+cd /home/kernel/modules
+sudo insmod chardev.ko
+sudo mknod -m 777 /dev/chardev c 240 0
+echo "1234" > /dev/chardev
+cat /dev/chardev
+dmesg
+lsmod
+echo "0000000000000000" > /dev/chardev
+cat /dev/chardev
+cd /home/student/Downloads/PA
+./pa2grader /dev/chardev > output3.txt
+./pa2grader /dev/chardev 
+git add .
+git commit -m "output3"
+git push
+git pull
+cp chardev.c /home/kernel/modules
+cd  /home/kernel/modules
+sudo rmmod chardev
+lsmod
+cd /dev
+ls
+rm -rf chardev
+sudo rm -rf chardev
+cd  /home/kernel/modules
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+ls
+rm -rf chardev.o
+rm -rf chardev.ko
+rm -rf chardev.mod.c
+rm -rf chardev.mod.o
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+kill
+ps aux | grep chardev
+pidof chardev
+pidof student
+pidof 2772
+kill 2772
+kill 14224
+kill -9 2772
+ps aux | grep chardev
+kill 2785
+sudo insmod chardev.ko
+cd /home///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+cd kernel/moudles
+cd kernel
+cd modules
+sudo insmod chardev.ko
+cd /home/student/Downloads/PA
+sudo mknod -m 777 /dev/chardev c 240 0
+dmese
+dmesg
+sudo mknod -m 777 /dev/chardev c 240 0
+./pa2grader /dev/chardev 
+./pa2grader /dev/chardev -> output4_37.txt
+git add .
+git commit -m ">757 "
+git push
+sudo rmmod chardev
+sudo rm -rf /dev/chardev
+cd /home/kernel/modules
+ls
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+sudo mknod -m 777 /dev/chardev c 240 0
+lsmod
+cd /home/student/Downloads/PA
+./pa2grader /dev/chardev
+git pull
+ls
+vi chardev.c
+git pull
+git add .
+git commit -m "cmd"
+git push
+cp chardev.c /home/kernel/modules
+cd /home/kernel/modules
+vi chadev.c
+vi chardev.c
+sudo rmmod chardev
+sudo rm -rf /dev/chardev
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+cd /home/kernel/modules
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+sudo mknod -m 777 /dev/chardev c 240 0
+cd /home/student/Downloads/PA
+./pa2grader /dev/chardev
+dmesg
+git pull
+vi chardev.c
+cp chardev.c /home/kernel/modules 
+git add .
+git commit -m "major number static"
+git push
+git pull
+cp chardev.c /home/kernel/modules 
+cd /home/kernel/modules 
+sudo rmmod chardev
+sudo rm -rf /dev/chardev
+make -C /lib/modules/$(uname -r)/build M=$PWD
+cd /home/student/Downloads/PA
+git pull
+cp chardev.c /home/kernel/modules 
+cd /home/kernel/modules 
+make -C /lib/modules/$(uname -r)/build M=$PWD
+cd /home/student/Downloads/PA
+git pull
+cp chardev.c /home/kernel/modules 
+
+make -C /lib/modules/$(uname -r)/build M=$PWD
+vi chardev.c
+make -C /lib/modules/$(uname -r)/build M=$PWD
+cd /home/student/Downloads/PA
+git pull
+cd /home/kernel/modules 
+cd /home/student/Downloads/PA
+cd /home/kernel/modules 
+sudo insmod chardev.ko
+cd /home/kernel/modules 
+sudo insmod chardev.ko
+sudo mknod -m 777 /dev/chardev c 240 0
+cd /home/student/Downloads/PA
+./pa2grader /dev/chardev
+dmesg
+cd /home/kernel/modules 
+vi chardev.c
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo rmmod chardev
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+sudo mknod -m 777 /dev/chardev c 240 0
+sudo rm /dev/chardev
+sudo mknod -m 777 /dev/chardev c 240 0
+cd /home/student/Downloads/PA
+./pa2grader /dev/chardev
+dmesg
+cd /home/kernel/modules
+sudo rmmod chardev
+sudo rm /dev/chardev
+cd /home/student/Downloads/PA
+cp chardev.c /home/kernel/modules 
+cd /home/kernel/modules
+make -C /lib/modules/$(uname -r)/build M=$PWD
+vi chardev.c
+cd /home/student/Downloads/PA
+git pull
+cp chardev.c /home/kernel/modules 
+cd /home/kernel/modules
+vi chardev.c
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+cd /home/student/Downloads/PA
+sudo mknod -m 777 /dev/chardev c 240 0
+./pa2grader /dev/chardev
+dmesg
+lsmod
+cat /proc/devices
+git pull
+cp chardev.c /home/kernel/modules 
+cd /home/kernel/modules 
+sudo rmmod chardev
+sudo rm /dev/char
+sudo rm /dev/chardev
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+sudo mknod -m 777 /dev/chardev c 240 0
+cd /home/student/Downloads/PA
+./pa2grader /dev/chardev
+cd /home/student/Downloads/PA
+git pull
+vi chardev.c
+cp chardev.c /home/kernel/modules 
+cd  /home/kernel/modules 
+sudo rmmod chardev
+sudo rm /dev/chardev
+make -C /lib/modules/$(uname -r)/build M=$PWD
+cd /home/student/Downloads/PA
+git pull
+cp chardev.c /home/kernel/modules 
+cd  /home/kernel/modules 
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+sudo mknod -m 777 /dev/chardev c 240 0
+cd /home/student/Downloads/PA
+./pa2grader /dev/chardev
+git pull
+cp chardev.c /home/kernel/modules 
+cd  /home/kernel/modules 
+sudo rmmod chardev
+sudo rm /dev/chardev
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+lsmod
+d,seg
+dmseg
+dmesg
+sudo insmod chardev.ko
+cat /proc/devices
+sudo mknod -r /dev/chardev c 240 0
+cat /proc/devices
+sudo rmmod chardev
+sudo mknod -r /dev/chardev c 240 0
+sudo lsof | grep /dev/chardev
+sudo rm /dev/chardev
+sudo reboot
+cat /proc/devices
+cd /home/kernel/modules 
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+sudo mknod -m 777 /dev/chardev c 240 0
+cd /home/student/Downloads/PA
+./pa2grader /dev/chardev
+cd /home/student/Downloads/PA
+./pa2grader /dev/chardev
+strace -e lseek ./selftest1 /dev/chardev
+cat /dev/chardev
+./pa2grader /dev/chardev
+./pa2grader /dev/chardev > output5.txt
+git add .
+git commit -m "output5 "
+git push
+git pull
+cp chardev.c /home/kernel/modules 
+cd /home/kernel/modules
+sudo rmmod chardev
+sudo rm -rf /dev/char
+cat /proc/devices
+sudo rm -rf /proc/devices
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo reboot
+cd /home/student/Downloads/PA
+git pull
+cp chardev.c /home/kernel/modules 
+cd  /home/kernel/modules 
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+sudo mknod -m 777 /dev/chardev c 240 0
+cd /home/student/Downloads/PA
+
+./pa2grader /dev/chardev > output6_46/50.txt
+./pa2grader /dev/chardev > output6_46.txt
+git add .
+git commit -m "after remove nbytes"
+git push
+git pull
+cp chardev.c /home/kernel/modules 
+sudo rmmod chardev
+sudo rm /dev/chardev
+cd /home/kernel/modules 
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+sudo reboot
+cd /home/kernel/modules 
+sudo insmod chardev.ko
+cd /home/student/Downloads/PA
+./pa2grader /dev/chardev
+cd /home/student/Downloads/PA
+git pull
+cp chardev.c /home/kernel/modules 
+cd /home/kernel/modules 
+sudo rmmod chardev
+sudo rm -rf /dev/chardev
+make -C /lib/modules/$(uname -r)/build M=$PWD
+sudo insmod chardev.ko
+vi chardev.c
+sudo reboot
