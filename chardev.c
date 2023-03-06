@@ -5,7 +5,7 @@
 
 #define DEVICE_NAME "chardev" // Name of device in /dev
 #define BUFFER_SIZE 756 
-
+#define Major 240 
 
 static char *device_buffer; 
 
