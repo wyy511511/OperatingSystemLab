@@ -26,25 +26,48 @@ int main(int argc, char *argv[]) {
                 scanf("%zu", &nbytes);
                 while (getchar() != '\n'); // consume remaining input
 
-                char *buffer = malloc(nbytes);
+                char *buffer = malloc(nbytes + 1);
                 if (buffer == NULL) {
                     perror("malloc");
                     exit(EXIT_FAILURE);
                 }
 
-                size_t nread = fread(buffer, 1, nbytes, fp);
-                if (nread < nbytes) {
-                    if (feof(fp)) {
-                        printf("End of file reached\n");
-                    } else if (ferror(fp)) {
-                        perror("fread");
-                    }
+                ssize_t nread = read(fileno(fp), buffer, nbytes);
+                if (nread == -1) {
+                    perror("read");
                 } else {
-                    printf("%.*s\n", (int) nread, buffer);
+                    buffer[nread] = '\0';
+                    printf("%s\n", buffer);
                 }
 
                 free(buffer);
                 break;
+
+            // case 'r':
+            //     printf("Enter the number of bytes you want to read: ");
+            //     size_t nbytes;
+            //     scanf("%zu", &nbytes);
+            //     while (getchar() != '\n'); // consume remaining input
+
+            //     char *buffer = malloc(nbytes);
+            //     if (buffer == NULL) {
+            //         perror("malloc");
+            //         exit(EXIT_FAILURE);
+            //     }
+
+            //     size_t nread = fread(buffer, 1, nbytes, fp);
+            //     if (nread < nbytes) {
+            //         if (feof(fp)) {
+            //             printf("End of file reached\n");
+            //         } else if (ferror(fp)) {
+            //             perror("fread");
+            //         }
+            //     } else {
+            //         printf("%.*s\n", (int) nread, buffer);
+            //     }
+
+            //     free(buffer);
+            //     break;
 
             case 'w':
                 printf("Enter the string you want to write: ");
