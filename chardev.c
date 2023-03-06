@@ -125,12 +125,12 @@ static loff_t chardev_llseek(struct file *file, loff_t offset, int whence)
 
 
         case 1: // SEEK_CUR
-        if (file->f_pos + offset < 0){
-                ret = -EINVAL;
-                break;
+        // if (file->f_pos + offset < 0){
+        //         ret = -EINVAL;
+        //         break;
 
-        }
-        if (file->f_pos + offset > BUFFER_SIZE){
+        // }
+
                 
             newpos = file->f_pos + offset ;
             newpos %= BUFFER_SIZE;
@@ -141,10 +141,23 @@ static loff_t chardev_llseek(struct file *file, loff_t offset, int whence)
             ret = file->f_pos;
             break;
 
-        }
-        file->f_pos += offset;
-        ret = file->f_pos;
-        break;
+
+
+        // if (file->f_pos + offset > BUFFER_SIZE){
+                
+        //     newpos = file->f_pos + offset ;
+        //     newpos %= BUFFER_SIZE;
+        //     if (newpos < 0) {
+        //         newpos += BUFFER_SIZE;
+        //     }
+        //     file->f_pos = newpos;
+        //     ret = file->f_pos;
+        //     break;
+
+        // }
+        // file->f_pos += offset;
+        // ret = file->f_pos;
+        // break;
 
 
 
