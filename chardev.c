@@ -96,107 +96,7 @@ static ssize_t chardev_write(struct file *file, const char *buffer, size_t lengt
 }
 
 
-// static ssize_t chardev_write(struct file *file, const char *buffer, size_t length, loff_t *offset)
-// {
-//     int nbytes = BUFFER_SIZE - *offset;
-//     if (nbytes > length)
-//     {
-//         nbytes = length;
-//     }
 
-//     if (nbytes <= 0)
-//     {
-//         printk(KERN_ALERT "Failed to write to chardev device file: write operation exceeds device file size\n");
-//         return -EINVAL;
-//     }
-
-//     if (copy_from_user(device_buffer + *offset, buffer, nbytes) != 0)
-//     {
-//         printk(KERN_ALERT "Failed to write to chardev device file\n");
-//         return -EFAULT;
-//     }
-
-//     *offset += nbytes;
-
-//     if (length+ *offset > BUFFER_SIZE)
-//     {
-//         return -1;
-//     }
-
-//     return nbytes;
-// }
-
-    // *offset = (*offset + nbytes) % BUFFER_SIZE;
-// static ssize_t chardev_read(struct file *file, char *buffer, size_t length, loff_t *offset)
-// {
-//     int nbytes = BUFFER_SIZE - *offset;
-//     if (nbytes > length)
-//     {
-//         nbytes = length;
-//     }
-//     if (nbytes < 0)
-//     {
-//         nbytes = 0;
-//     }
-
-//     if (*offset + nbytes > BUFFER_SIZE)
-//     {
-//         printk(KERN_ALERT "Failed to read from chardev device file: read operation exceeds device file size\n");
-//         return -1;
-
-//         // return -EINVAL;
-//     }
-    
-
-
-//     if (copy_to_user(buffer, device_buffer + *offset, nbytes) != 0)
-//     {
-//         printk(KERN_ALERT "Failed to read from chardev device file\n");
-//         return -EFAULT;
-//     }
-
-
-//     *offset += nbytes;
-
-
-
-//     return nbytes;
-// }
-
-//     // *offset = (*offset + nbytes) % BUFFER_SIZE;
-// static ssize_t chardev_write(struct file *file, const char *buffer, size_t length, loff_t *offset)
-// {
-
-//     int nbytes = BUFFER_SIZE - *offset;
-//     if (nbytes > length)
-//     {
-//         nbytes = length;
-//     }
-
-
-//     // if (nbytes <= 0)
-//     if (nbytes <0)
-//     {
-//         return -1;
-//         // printk(KERN_ALERT "Failed to write to chardev device file: write operation exceeds device file size\n");
-//         // return -EINVAL;
-//     }
-
-
-//     if (copy_from_user(device_buffer + *offset, buffer, nbytes) != 0)
-//     {
-//         printk(KERN_ALERT "Failed to write to chardev device file\n");
-//         return -EFAULT;
-//     }
-
-
-//     *offset += nbytes;
-
-
-
-
-//     return nbytes; 
-// }
 
 
 static loff_t chardev_llseek(struct file *file, loff_t offset, int whence)
@@ -222,7 +122,10 @@ static loff_t chardev_llseek(struct file *file, loff_t offset, int whence)
     }
 
 
-    // handle seeking beyond buffer size by wrapping around to beginning of buffer
+    if (newpos < 0 || (whence == 1 || whence == 2) && newpos > BUFFER_SIZE)
+    {
+        return -EINVAL;
+    }
 
     newpos %= BUFFER_SIZE;
 
@@ -279,30 +182,28 @@ static struct file_operations file_ops = {
 .llseek = chardev_llseek,
 };
 
-static int __init chardev_init(void)
-{
-printk(KERN_INFO "Initializing chardev\n"); 
 
-device_buffer = kmalloc(BUFFER_SIZE, GFP_KERNEL);
-if (!device_buffer)
-{
-    printk(KERN_ALERT "Failed to allocate memory for device buffer\n");
-    return -ENOMEM;
-}
+static int __init chardev_init(void) 
+ { 
+int ret = 0;
+ printk(KERN_INFO "Initializing chardev\n");  
+   device_buffer = kmalloc(BUFFER_SIZE, GFP_KERNEL); 
+ if (!device_buffer) 
+ { 
+ printk(KERN_ALERT "Failed to allocate memory for device buffer\n"); 
+ return -ENOMEM; 
+ } 
+     ret = register_chrdev(Major, DEVICE_NAME, &file_ops); 
+ if (ret < 0) 
+ { 
+ printk(KERN_ALERT "Failed to register character device driver\n"); 
+ kfree(device_buffer); 
+ return ret; 
+ } 
+   printk(KERN_INFO "Registered chardev with major number %d\n", Major); 
+   return 0; 
+ } 
 
-
-Major = register_chrdev(Major, DEVICE_NAME, &file_ops);
-if (Major < 0)
-{
-    printk(KERN_ALERT "Failed to register character device driver\n");
-    kfree(device_buffer);
-    return Major;
-}
-
-printk(KERN_INFO "Registered chardev with major number %d\n", Major);
-
-return 0;
-}
 
 static void __exit chardev_exit(void)
 {
