@@ -4,10 +4,10 @@
 #include <linux/slab.h>
 
 #define DEVICE_NAME "chardev" // Name of device in /dev
-#define BUFFER_SIZE 756 // Size of the kernel buffer
+#define BUFFER_SIZE 756 
 
-static int Major; // Major number of the device driver
-static char *device_buffer; // Pointer to the device buffer
+
+static char *device_buffer; 
 
 
 
@@ -18,18 +18,16 @@ static int chardev_open(struct inode *inode, struct file *file)
     printk(KERN_INFO "Opened chardev device file\n");
     return 0;
 }
-
-// Called when the device file is closed
 static int chardev_release(struct inode *inode, struct file *file)
 {
     printk(KERN_INFO "Closed chardev device file\n");
     return 0;
 }
 
-// Called when data is read from the device file
+
 static ssize_t chardev_read(struct file *file, char *buffer, size_t length, loff_t *offset)
 {
-    // Calculate the number of bytes to read
+    
     int nbytes = BUFFER_SIZE - *offset;
     if (nbytes > length)
     {
@@ -118,7 +116,7 @@ static ssize_t chardev_write(struct file *file, const char *buffer, size_t lengt
 // return nbytes; 
 // }
 
-// Called when the position in the device file is changed
+
 static loff_t chardev_llseek(struct file *file, loff_t offset, int whence)
 {
     loff_t newpos;
