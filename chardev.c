@@ -5,7 +5,7 @@
 
 #define DEVICE_NAME "chardev" // Name of device in /dev
 #define BUFFER_SIZE 756 
-#define Major 240 
+// #define Major 240 
 
 static char *device_buffer; 
 
@@ -117,6 +117,7 @@ static loff_t chardev_llseek(struct file *file, loff_t offset, int whence)
     {
         return -EINVAL;
     }
+    newpos %= BUFFER_SIZE;
 
     file->f_pos = newpos;
 
@@ -171,7 +172,8 @@ static void __exit chardev_exit(void)
 {
     printk(KERN_INFO "Exiting chardev\n");
 
-    unregister_chrdev(Major, DEVICE_NAME);
+    // unregister_chrdev(Major, DEVICE_NAME);
+    unregister_chrdev(240, DEVICE_NAME);
 
 
     kfree(device_buffer);
