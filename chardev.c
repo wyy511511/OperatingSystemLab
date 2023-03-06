@@ -96,44 +96,111 @@ static ssize_t chardev_write(struct file *file, const char *buffer, size_t lengt
 }
 
 
-
-
-
 static loff_t chardev_llseek(struct file *file, loff_t offset, int whence)
 {
-    loff_t newpos;
+    loff_t ret = 0;
 
     switch (whence)
     {
         case 0: // SEEK_SET
-            newpos = offset;
+            if(offset < 0){
+                ret = -EINVAL;
+                break;
+            }
+            if ((unsigned int)offset >BUFFER_SIZE ){
+                ret = -EINVAL;
+                break;
+            }
+            file->f_pos = offset;// unsigned?
+            ret = file->f_pos;
             break;
 
+
+
         case 1: // SEEK_CUR
-            newpos = file->f_pos + offset;
+        if (file->f_pos + offset < 0){
+                ret = -EINVAL;
+                break;
+
+        }
+        if (file->f_pos + offset > BUFFER_SIZE){
+                
+            newpos = file->f_pos + offset ;
+            newpos %= BUFFER_SIZE;
+            file->f_pos = newpos;
+            ret = file->f_pos;
             break;
+
+        }
+        file->f_pos += offset 
+        ret = file->f_pos;
+        break;
+
+
 
         case 2: // SEEK_END
             newpos = BUFFER_SIZE + offset;
+
+            if(newpos < 0){
+                ret =  -EINVAL;
+                break;
+
+            }
+            newpos %= BUFFER_SIZE;
+            file->f_pos = newpos;
+            ret = file->f_pos;
             break;
 
+
+
         default:
-            return -EINVAL;
+            ret =  -EINVAL;
+            break;
     }
 
 
-    if (newpos < 0 || (whence == 1 || whence == 2) && newpos > BUFFER_SIZE)
-    {
-        return -EINVAL;
-    }
 
-    newpos %= BUFFER_SIZE;
-
-
-    file->f_pos = newpos;
-
-    return newpos;
+    return ret;
 }
+
+
+
+
+// static loff_t chardev_llseek(struct file *file, loff_t offset, int whence)
+// {
+//     loff_t newpos;
+
+//     switch (whence)
+//     {
+//         case 0: // SEEK_SET
+//             newpos = offset;
+//             break;
+
+//         case 1: // SEEK_CUR
+//             newpos = file->f_pos + offset;
+//             break;
+
+//         case 2: // SEEK_END
+//             newpos = BUFFER_SIZE + offset;
+//             break;
+
+//         default:
+//             return -EINVAL;
+//     }
+
+
+//     if (newpos < 0 || (whence == 1 || whence == 2) && newpos > BUFFER_SIZE)
+//     {
+//         return -EINVAL;
+//     }
+
+//     newpos %= BUFFER_SIZE;
+
+
+//     file->f_pos = newpos;
+
+//     return newpos;
+// }
 
 
 
