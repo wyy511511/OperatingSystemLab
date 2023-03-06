@@ -48,7 +48,7 @@ static ssize_t chardev_read(struct file *file, char *buffer, size_t length, loff
 
     *offset += nbytes;
 
-    if (*offset > BUFFER_SIZE)
+    if (*offset + length > BUFFER_SIZE)
     {
         return -1;
     }
@@ -78,7 +78,7 @@ static ssize_t chardev_write(struct file *file, const char *buffer, size_t lengt
 
     *offset += nbytes;
 
-    if (*offset > BUFFER_SIZE)
+    if (length+ *offset > BUFFER_SIZE)
     {
         return -1;
     }
