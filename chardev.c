@@ -2,7 +2,7 @@
 #include <linux/fs.h>
 #include <linux/uaccess.h>
 #include <linux/slab.h>
-#include <linux/math.h>
+
 
 #define DEVICE_NAME "chardev" // Name of device in /dev
 #define BUFFER_SIZE 756
@@ -134,6 +134,9 @@ static loff_t chardev_llseek(struct file *file, loff_t offset, int whence)
                 
             newpos = file->f_pos + offset ;
             newpos %= BUFFER_SIZE;
+            if (newpos < 0) {
+                newpos += BUFFER_SIZE;
+            }
             file->f_pos = newpos;
             ret = file->f_pos;
             break;
