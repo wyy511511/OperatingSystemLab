@@ -88,33 +88,6 @@ static ssize_t chardev_write(struct file *file, const char *buffer, size_t lengt
     return nbytes; 
 }
  
-// // Called when data is written to the device file
-// static ssize_t chardev_write(struct file *file, const char *buffer, size_t length, loff_t *offset)
-// {
-//     // Calculate the number of bytes to write
-//     int nbytes = BUFFER_SIZE - *offset;
-//     if (nbytes > length)
-//     {
-//         nbytes = length;
-//     }
-//     if (nbytes < 0)
-//     {
-//         nbytes = 0;
-//     }
-
-//     // Copy data from the user buffer to the device buffer
-//     if (copy_from_user(device_buffer + *offset, buffer, nbytes) != 0)
-// {
-// printk(KERN_ALERT "Failed to write to chardev device file\n");
-// return -EFAULT;
-// }
-
-
-// // Update the current position
-// *offset += nbytes;
-
-// return nbytes; 
-// }
 
 
 static loff_t chardev_llseek(struct file *file, loff_t offset, int whence)
@@ -152,42 +125,7 @@ static loff_t chardev_llseek(struct file *file, loff_t offset, int whence)
 
 
 
-// static loff_t chardev_llseek(struct file *file, loff_t offset, int whence)
-// {
-// loff_t newpos;
-// switch (whence)
-// {
-//     case 0: // SEEK_SET
-//         newpos = offset;
-//         break;
 
-//     case 1: // SEEK_CUR
-//         newpos = file->f_pos + offset;
-//         break;
-
-//     case 2: // SEEK_END
-//         newpos = BUFFER_SIZE + offset;
-//         break;
-
-//     default:
-//         return -EINVAL;
-// }
-
-// // Check for out-of-bounds seek
-// if (newpos < 0)
-// {
-//     newpos = 0;
-// }
-// else if (newpos > BUFFER_SIZE)
-// {
-//     newpos = BUFFER_SIZE;
-// }
-
-// file->f_pos = newpos;
-
-// return newpos;
-
-// }
 
 
 static struct file_operations file_ops = {
@@ -198,12 +136,12 @@ static struct file_operations file_ops = {
     .release = chardev_release,
     .llseek = chardev_llseek,
 };
-// Called when the module is loaded
+
 static int __init chardev_init(void)
 {
     printk(KERN_INFO "Initializing chardev\n");
 
-    // Allocate memory for the device buffer
+
     device_buffer = kmalloc(BUFFER_SIZE, GFP_KERNEL);
     if (!device_buffer)
     {
@@ -211,7 +149,7 @@ static int __init chardev_init(void)
         return -ENOMEM;
     }
 
-    // Register the character device driver
+
     Major = register_chrdev(240, DEVICE_NAME, &file_ops);
     if (Major < 0)
     {
@@ -233,12 +171,11 @@ static void __exit chardev_exit(void)
 {
     printk(KERN_INFO "Exiting chardev\n");
 
-    // Unregister the character device driver
     unregister_chrdev(Major, DEVICE_NAME);
 
-    // Free the memory allocated for the device buffer
+
     kfree(device_buffer);
 }
-// Register the init and exit functions with the kernel
+
 module_init(chardev_init);
 module_exit(chardev_exit);
