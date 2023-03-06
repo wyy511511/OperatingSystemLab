@@ -8,7 +8,7 @@
 // #define Major 240 
 
 static char *device_buffer; 
-
+static int Major;
 
 
 // File operations for the character device driver
