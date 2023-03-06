@@ -1,100 +1,87 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <errno.h>
 
 #define BUFFER_SIZE 1024
 
-void print_error(const char *msg) {
-    fprintf(stderr, "Error: %s\n", msg);
-    exit(EXIT_FAILURE);
-}
-
-void print_prompt(const char *msg) {
-    printf("%s", msg);
-    fflush(stdout);
-}
-
-int read_int() {
-    int value;
-    if (scanf("%d", &value) != 1) {
-        print_error("Invalid input");
-    }
-    return value;
-}
-
-void read_string(char *buffer, size_t size) {
-    fgets(buffer, size, stdin);
-    size_t len = strlen(buffer);
-    if (len > 0 && buffer[len-1] == '\n') {
-        buffer[len-1] = '\0';
-    }
-}
-
 int main(int argc, char *argv[]) {
     if (argc != 2) {
-        print_error("Usage: ./program <file>");
+        fprintf(stderr, "Usage: %s <device file>\n", argv[0]);
+        exit(EXIT_FAILURE);
     }
 
-    int fd = open(argv[1], O_RDWR);
-    if (fd == -1) {
-        print_error(strerror(errno));
+    FILE *fp = fopen(argv[1], "r+");
+
+    if (fp == NULL) {
+        perror("fopen");
+        exit(EXIT_FAILURE);
     }
 
     while (1) {
-        print_prompt("Choose an option (r for read, w for write, s for seek): ");
-        char option;
-        read_string(&option, 1);
+        printf("Choose an option (r for read, w for write, s for seek): ");
+        char option = getchar();
+        while (getchar() != '\n'); // consume remaining input
 
         switch (option) {
-            case 'r': {
-                print_prompt("Enter the number of bytes you want to read: ");
-                int nbytes = read_int();
+            case 'r':
+                printf("Enter the number of bytes you want to read: ");
+                size_t nbytes;
+                scanf("%zu", &nbytes);
+                while (getchar() != '\n'); // consume remaining input
 
                 char *buffer = malloc(nbytes + 1);
                 if (buffer == NULL) {
-                    print_error(strerror(errno));
+                    perror("malloc");
+                    exit(EXIT_FAILURE);
                 }
 
-                ssize_t nread = pread(fd, buffer, nbytes, lseek(fd, 0, SEEK_CUR));
-                if (nread == -1) {
-                    print_error(strerror(errno));
+                size_t nread = fread(buffer, 1, nbytes, fp);
+                if (nread < nbytes) {
+                    if (feof(fp)) {
+                        printf("End of file reached\n");
+                    } else if (ferror(fp)) {
+                        perror("fread");
+                    }
+                } else {
+                    buffer[nread] = '\0';
+                    printf("%s\n", buffer);
                 }
-
-                buffer[nread] = '\0';
-                printf("%s\n", buffer);
 
                 free(buffer);
                 break;
-            }
 
-            case 'w': {
-                print_prompt("Enter the string you want to write: ");
-                char buffer[BUFFER_SIZE];
-                read_string(buffer, BUFFER_SIZE);
+            case 'w':
+                printf("Enter the string you want to write: ");
+                char buf[BUFFER_SIZE];
+                fgets(buf, BUFFER_SIZE, stdin);
+                size_t len = strlen(buf);
+                if (buf[len-1] == '\n') {
+                    buf[len-1] = '\0';
+                    len--;
+                }
 
-                ssize_t nwritten = pwrite(fd, buffer, strlen(buffer), lseek(fd, 0, SEEK_CUR));
-                if (nwritten == -1) {
-                    print_error(strerror(errno));
+                size_t nwritten = fwrite(buf, 1, len, fp);
+                if (nwritten < len) {
+                    perror("fwrite");
                 }
                 break;
-            }
 
-            case 's': {
-                print_prompt("Enter an offset value: ");
-                int offset = read_int();
+            case 's':
+                printf("Enter an offset value: ");
+                long offset;
+                scanf("%ld", &offset);
+                while (getchar() != '\n'); // consume remaining input
 
-                print_prompt("Enter a value for whence (0 for SEEK_SET, 1 for SEEK_CUR, 2 for SEEK_END): ");
-                int whence = read_int();
+                printf("Enter a value for whence (0 for SEEK_SET, 1 for SEEK_CUR, 2 for SEEK_END): ");
+                int whence;
+                scanf("%d", &whence);
+                while (getchar() != '\n'); // consume remaining input
 
-                off_t newpos = lseek(fd, offset, whence);
-                if (newpos == -1) {
-                    print_error(strerror(errno));
+                int res = fseek(fp, offset, whence);
+                if (res != 0) {
+                    perror("fseek");
                 }
                 break;
-            }
 
             default:
                 continue;
@@ -105,8 +92,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    close(fd);
+    fclose(fp);
 
     return EXIT_SUCCESS;
 }
-
