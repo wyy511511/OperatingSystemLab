@@ -104,15 +104,17 @@ static loff_t chardev_llseek(struct file *file, loff_t offset, int whence)
     switch (whence)
     {
         case 0: // SEEK_SET
-            if(offset < 0){
-                ret = -EINVAL;
-                break;
-            }
-            if ((unsigned int)offset >BUFFER_SIZE ){
-                ret = -EINVAL;
-                break;
-            }
-            file->f_pos = offset;// unsigned?
+            // if(offset < 0){
+            //     ret = -EINVAL;
+            //     break;
+            // }
+            // if ((unsigned int)offset >BUFFER_SIZE ){
+            //     ret = -EINVAL;
+            //     break;
+            // }
+            newpos = offset;
+            newpos %= BUFFER_SIZE;
+            file->f_pos = newpos;// unsigned?
             ret = file->f_pos;
             break;
 
