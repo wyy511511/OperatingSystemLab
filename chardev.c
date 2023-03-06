@@ -50,7 +50,9 @@ static ssize_t chardev_read(struct file *file, char *buffer, size_t length, loff
     }
 
 
-    *offset += nbytes;
+    // *offset += nbytes;
+    *offset = (*offset + nbytes) % BUFFER_SIZE;
+
 
     return nbytes;
 }
@@ -80,7 +82,9 @@ static ssize_t chardev_write(struct file *file, const char *buffer, size_t lengt
     }
 
 
-    *offset += nbytes;
+    // *offset += nbytes;
+    *offset = (*offset + nbytes) % BUFFER_SIZE;
+
 
     return nbytes; 
 }
