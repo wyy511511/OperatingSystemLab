@@ -22,69 +22,109 @@ static int chardev_release(struct inode *inode, struct file *file)
     printk(KERN_INFO "Closed chardev device file\n");
     return 0;
 }
+
 static ssize_t chardev_read(struct file *file, char *buffer, size_t length, loff_t *offset)
 {
-    int nbytes = BUFFER_SIZE - *offset;
-    if (nbytes > length)
-    {
-        nbytes = length;
-    }
-    if (nbytes < 0)
-    {
-        nbytes = 0;
-    }
-
-    if (*offset + nbytes > BUFFER_SIZE)
+    if (*offset + length > BUFFER_SIZE)
     {
         printk(KERN_ALERT "Failed to read from chardev device file: read operation exceeds device file size\n");
         return -EINVAL;
     }
 
-    if (copy_to_user(buffer, device_buffer + *offset, nbytes) != 0)
+    if (copy_to_user(buffer, device_buffer + *offset, length) != 0)
     {
         printk(KERN_ALERT "Failed to read from chardev device file\n");
         return -EFAULT;
     }
 
-    *offset += nbytes;
+    *offset += length;
 
-    if (*offset + length > BUFFER_SIZE)
-    {
-        return -1;
-    }
-
-    return nbytes;
+    return length;
 }
+
+// static ssize_t chardev_read(struct file *file, char *buffer, size_t length, loff_t *offset)
+// {
+//     int nbytes = BUFFER_SIZE - *offset;
+//     if (nbytes > length)
+//     {
+//         nbytes = length;
+//     }
+//     if (nbytes < 0)
+//     {
+//         nbytes = 0;
+//     }
+
+//     if (*offset + nbytes > BUFFER_SIZE)
+//     {
+//         printk(KERN_ALERT "Failed to read from chardev device file: read operation exceeds device file size\n");
+//         return -EINVAL;
+//     }
+
+//     if (copy_to_user(buffer, device_buffer + *offset, nbytes) != 0)
+//     {
+//         printk(KERN_ALERT "Failed to read from chardev device file\n");
+//         return -EFAULT;
+//     }
+
+//     *offset += nbytes;
+
+//     if (*offset + length > BUFFER_SIZE)
+//     {
+//         return -1;
+//     }
+
+//     return nbytes;
+// }
 
 static ssize_t chardev_write(struct file *file, const char *buffer, size_t length, loff_t *offset)
 {
-    int nbytes = BUFFER_SIZE - *offset;
-    if (nbytes > length)
-    {
-        nbytes = length;
-    }
-
-    if (nbytes <= 0)
+    if (length + *offset > BUFFER_SIZE)
     {
         printk(KERN_ALERT "Failed to write to chardev device file: write operation exceeds device file size\n");
-        return -EINVAL;
+        return -1;
     }
 
-    if (copy_from_user(device_buffer + *offset, buffer, nbytes) != 0)
+    if (copy_from_user(device_buffer + *offset, buffer, length) != 0)
     {
         printk(KERN_ALERT "Failed to write to chardev device file\n");
         return -EFAULT;
     }
 
-    *offset += nbytes;
+    *offset += length;
 
-    if (length+ *offset > BUFFER_SIZE)
-    {
-        return -1;
-    }
-
-    return nbytes;
+    return length;
 }
+
+
+// static ssize_t chardev_write(struct file *file, const char *buffer, size_t length, loff_t *offset)
+// {
+//     int nbytes = BUFFER_SIZE - *offset;
+//     if (nbytes > length)
+//     {
+//         nbytes = length;
+//     }
+
+//     if (nbytes <= 0)
+//     {
+//         printk(KERN_ALERT "Failed to write to chardev device file: write operation exceeds device file size\n");
+//         return -EINVAL;
+//     }
+
+//     if (copy_from_user(device_buffer + *offset, buffer, nbytes) != 0)
+//     {
+//         printk(KERN_ALERT "Failed to write to chardev device file\n");
+//         return -EFAULT;
+//     }
+
+//     *offset += nbytes;
+
+//     if (length+ *offset > BUFFER_SIZE)
+//     {
+//         return -1;
+//     }
+
+//     return nbytes;
+// }
 
     // *offset = (*offset + nbytes) % BUFFER_SIZE;
 // static ssize_t chardev_read(struct file *file, char *buffer, size_t length, loff_t *offset)
