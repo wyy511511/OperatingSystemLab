@@ -17,6 +17,7 @@ int main(int argc, char *argv[]) {
     // Ask the user whether they want to read or write to the device
     char action;
     printf("Do you want to (r)ead or (w)rite to the device? ");
+    getchar();
     scanf("%c", &action);
 
     if (action == 'r') {
