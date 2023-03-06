@@ -221,18 +221,53 @@ static loff_t chardev_llseek(struct file *file, loff_t offset, int whence)
             return -EINVAL;
     }
 
-    if (newpos < 0 || (whence == 1 || whence == 2) && newpos > BUFFER_SIZE)
-    {
-        return -EINVAL;
-    }
 
+    // handle seeking beyond buffer size by wrapping around to beginning of buffer
 
     newpos %= BUFFER_SIZE;
+
 
     file->f_pos = newpos;
 
     return newpos;
 }
+
+
+
+// static loff_t chardev_llseek(struct file *file, loff_t offset, int whence)
+// {
+//     loff_t newpos;
+
+//     switch (whence)
+//     {
+//         case 0: // SEEK_SET
+//             newpos = offset;
+//             break;
+
+//         case 1: // SEEK_CUR
+//             newpos = file->f_pos + offset;
+//             break;
+
+//         case 2: // SEEK_END
+//             newpos = BUFFER_SIZE + offset;
+//             break;
+
+//         default:
+//             return -EINVAL;
+//     }
+
+//     if (newpos < 0 || (whence == 1 || whence == 2) && newpos > BUFFER_SIZE)
+//     {
+//         return -EINVAL;
+//     }
+
+
+//     newpos %= BUFFER_SIZE;
+
+//     file->f_pos = newpos;
+
+//     return newpos;
+// }
 
 
 static struct file_operations file_ops = {
